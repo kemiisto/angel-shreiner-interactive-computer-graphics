@@ -45,19 +45,24 @@ void Window::init()
         positions[i + 1] = 0.5f * (positions[i] + vertices[j]);
     }
 
-    vao.bind();
-    vbo.bind();
-    vbo.fill(positions, sizeof(positions));
+    // Configure OpenGL
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+    // Load shaders and initialize attribute buffers
     program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "vshader21.glsl");
     program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "fshader21.glsl");
     program.link();
     program.use();
 
-    vao.setAttributeArray(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(0);
+    // Load the data into the GPU
+    vao.bind();
+    vbo.bind();
+    vbo.fill(positions, sizeof(positions));
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    // Associate shader variables with our data buffer
+    auto vertexPositionLoc = program.attributeLocation("vertexPosition");
+    vao.setAttributeArray(vertexPositionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enableAttributeArray(vertexPositionLoc);
 }
 
 void Window::processInput()
