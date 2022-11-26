@@ -40,7 +40,7 @@ public:
     void draw() override;
 private:
     tinygl::ShaderProgram program;
-    tinygl::Buffer vbo{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
+    tinygl::Buffer vBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
     tinygl::VertexArrayObject vao;
 };
 
@@ -66,8 +66,8 @@ void Window::init()
 
     // Load the data into the GPU
     vao.bind();
-    vbo.bind();
-    vbo.fill(positions.begin(), positions.end());
+    vBuffer.bind();
+    vBuffer.fill(positions.begin(), positions.end());
 
     // Associate shader variables with our data buffer
     auto positionLoc = program.attributeLocation("aPosition");

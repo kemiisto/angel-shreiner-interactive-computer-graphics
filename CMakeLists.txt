@@ -28,6 +28,7 @@ set(02
     gasket2
     gasket3
     gasket3v2
+    gasket4
 )
 
 foreach(CHAPTER ${CHAPTERS})
