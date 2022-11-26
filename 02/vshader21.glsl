@@ -1,7 +1,7 @@
 #version 330 core
 
-in vec4 vertexPosition;
+in vec4 aPosition;
 
 void main() {
-    gl_Position = vertexPosition;
+    gl_Position = aPosition;
 }

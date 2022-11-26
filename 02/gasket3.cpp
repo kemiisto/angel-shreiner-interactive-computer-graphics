@@ -25,10 +25,10 @@ void Window::init()
 
     // First, initialize the vertices of our 3D gasket.
     glm::vec3 vertices[] = {
-        {-0.5f, -0.5f, -0.5f},
-        { 0.5f, -0.5f, -0.5f},
-        { 0.0f,  0.5f,  0.0f},
-        { 0.0f, -0.5f,  0.5f}
+        { -0.5f, -0.5f, -0.5f },
+        {  0.5f, -0.5f, -0.5f },
+        {  0.0f,  0.5f,  0.0f },
+        {  0.0f, -0.5f,  0.5f }
     };
 
     positions.emplace_back(0.0f, 0.0f, 0.0f);
@@ -60,9 +60,9 @@ void Window::init()
     vbo.fill(positions.begin(), positions.end());
 
     // Associate shader variables with our data buffer
-    auto vertexPositionLoc = program.attributeLocation("aPosition");
-    vao.setAttributeArray(vertexPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(vertexPositionLoc);
+    auto positionLoc = program.attributeLocation("aPosition");
+    vao.setAttributeArray(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enableAttributeArray(positionLoc);
 }
 
 void Window::processInput()
