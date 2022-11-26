@@ -1,6 +1,6 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
-#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 #include <random>
 
 constexpr int numPositions = 5000;
@@ -20,24 +20,22 @@ private:
 
 void Window::init()
 {
-    std::vector<glm::vec2> positions;
+    std::vector<glm::vec3> positions;
     positions.reserve(numPositions);
 
-    // First, initialize the corners of our gasket with three positions.
-    glm::vec2 vertices[] = {
-        { -1.0f, -1.0f },
-        {  0.0f,  1.0f },
-        {  1.0f, -1.0f }
+    // First, initialize the vertices of our 3D gasket.
+    glm::vec3 vertices[] = {
+        {-0.5f, -0.5f, -0.5f},
+        { 0.5f, -0.5f, -0.5f},
+        { 0.0f,  0.5f,  0.0f},
+        { 0.0f, -0.5f,  0.5f}
     };
+
+    positions.emplace_back(0.0f, 0.0f, 0.0f);
 
     std::random_device device;
     std::mt19937 engine(device());
-    std::uniform_int_distribution<int> distribution(0, 2);
-
-    // Specify a starting positions for our iterations - it must lie inside any set of three vertices
-    auto u = vertices[0] + vertices[1];
-    auto v = vertices[0] + vertices[2];
-    positions.emplace_back(0.25f * (u + v));
+    std::uniform_int_distribution<int> distribution(0, 3);
 
     // Compute new positions
     // Each new point is located midway between last point and a randomly chosen vertex
@@ -48,10 +46,11 @@ void Window::init()
 
     // Configure OpenGL
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_DEPTH_TEST);
 
     // Load shaders and initialize attribute buffers
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "vshader21.glsl");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "fshader21.glsl");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "vshader23.glsl");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "fshader23.glsl");
     program.link();
     program.use();
 
@@ -62,7 +61,7 @@ void Window::init()
 
     // Associate shader variables with our data buffer
     auto vertexPositionLoc = program.attributeLocation("vertexPosition");
-    vao.setAttributeArray(vertexPositionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.setAttributeArray(vertexPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(vertexPositionLoc);
 }
 
@@ -75,7 +74,7 @@ void Window::processInput()
 
 void Window::draw()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawArrays(GL_POINTS, 0, numPositions);
 }
 
