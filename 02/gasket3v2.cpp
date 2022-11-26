@@ -1,6 +1,7 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 #include <random>
 
 constexpr int numPositions = 5000;
@@ -14,7 +15,8 @@ public:
     void draw() override;
 private:
     tinygl::ShaderProgram program;
-    tinygl::Buffer vbo{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
+    tinygl::Buffer vboPositions{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
+    tinygl::Buffer vboColors{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
     tinygl::VertexArrayObject vao;
 };
 
@@ -22,6 +24,9 @@ void Window::init()
 {
     std::vector<glm::vec3> positions;
     positions.reserve(numPositions);
+
+    std::vector<glm::vec4> colors;
+    colors.reserve(numPositions);
 
     // First, initialize the vertices of our 3D gasket.
     glm::vec3 vertices[] = {
@@ -32,6 +37,7 @@ void Window::init()
     };
 
     positions.emplace_back(0.0f, 0.0f, 0.0f);
+    colors.emplace_back(0.5f, 0.5f, 0.5f, 1.0f);
 
     std::random_device device;
     std::mt19937 engine(device());
@@ -41,7 +47,14 @@ void Window::init()
     // Each new point is located midway between last point and a randomly chosen vertex
     for (int i = 0; i < numPositions; ++i) {
         auto j = distribution(engine);
-        positions.emplace_back(0.5f * (positions[i] + vertices[j]));
+        auto newPosition = 0.5f * (positions[i] + vertices[j]);
+        positions.push_back(newPosition);
+        colors.emplace_back(
+            (1.0f + newPosition[0]) / 2.0f,
+            (1.0f + newPosition[1]) / 2.0f,
+            (1.0f + newPosition[2]) / 2.0f,
+            1.0f
+        );
     }
 
     // Configure OpenGL
@@ -49,20 +62,27 @@ void Window::init()
     glEnable(GL_DEPTH_TEST);
 
     // Load shaders and initialize attribute buffers
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "vshader23.glsl");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "vshader23v2.glsl");
     program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "fshader23.glsl");
     program.link();
     program.use();
 
     // Load the data into the GPU
     vao.bind();
-    vbo.bind();
-    vbo.fill(positions.begin(), positions.end());
 
-    // Associate shader variables with our data buffer
+    vboPositions.bind();
+    vboPositions.fill(positions.begin(), positions.end());
+
     auto vertexPositionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(vertexPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(vertexPositionLoc);
+
+    vboColors.bind();
+    vboColors.fill(colors.begin(), colors.end());
+
+    auto colorLoc = program.attributeLocation("aColor");
+    vao.setAttributeArray(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enableAttributeArray(colorLoc);
 }
 
 void Window::processInput()
