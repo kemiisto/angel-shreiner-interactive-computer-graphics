@@ -20,7 +20,8 @@ private:
 
 void Window::init()
 {
-    glm::vec2 positions[numPoints];
+    std::vector<glm::vec2> positions;
+    positions.reserve(numPoints);
 
     // First, initialize the corners of our gasket with three positions.
     glm::vec2 vertices[] = {
@@ -36,13 +37,13 @@ void Window::init()
     // Specify a starting positions for our iterations - it must lie inside any set of three vertices
     auto u = vertices[0] + vertices[1];
     auto v = vertices[0] + vertices[2];
-    positions[0] = 0.25f * (u + v);
+    positions.emplace_back(0.25f * (u + v));
 
     // Compute new positions
     // Each new point is located midway between last point and a randomly chosen vertex
-    for (int i = 0; i < numPoints - 1; ++i) {
+    for (int i = 0; i < numPoints; ++i) {
         auto j = distribution(engine);
-        positions[i + 1] = 0.5f * (positions[i] + vertices[j]);
+        positions.emplace_back(0.5f * (positions[i] + vertices[j]));
     }
 
     // Configure OpenGL
@@ -57,7 +58,7 @@ void Window::init()
     // Load the data into the GPU
     vao.bind();
     vbo.bind();
-    vbo.fill(positions, sizeof(positions));
+    vbo.fill(positions.begin(), positions.end());
 
     // Associate shader variables with our data buffer
     auto vertexPositionLoc = program.attributeLocation("vertexPosition");

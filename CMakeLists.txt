@@ -24,7 +24,7 @@ set(CHAPTERS
 )
 
 set(02
-    example1
+    gasket1
 )
 
 foreach(CHAPTER ${CHAPTERS})
