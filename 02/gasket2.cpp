@@ -59,8 +59,8 @@ void Window::init()
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Load shaders and initialize attribute buffers
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "vshader21.glsl");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "fshader21.glsl");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "gasket2.vert");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "gasket2.frag");
     program.link();
     program.use();
 

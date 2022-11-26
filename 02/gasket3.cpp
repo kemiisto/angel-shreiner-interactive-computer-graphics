@@ -49,8 +49,8 @@ void Window::init()
     glEnable(GL_DEPTH_TEST);
 
     // Load shaders and initialize attribute buffers
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "vshader23.glsl");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "fshader23.glsl");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "gasket3.vert");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "gasket3.frag");
     program.link();
     program.use();
 
