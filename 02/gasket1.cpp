@@ -48,6 +48,7 @@ void Window::init()
 
     // Configure OpenGL
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_PROGRAM_POINT_SIZE);
 
     // Load shaders and initialize attribute buffers
     program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "gasket1.vert");

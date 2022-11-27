@@ -46,6 +46,7 @@ void Window::init()
 
     // Configure OpenGL
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_DEPTH_TEST);
 
     // Load shaders and initialize attribute buffers
