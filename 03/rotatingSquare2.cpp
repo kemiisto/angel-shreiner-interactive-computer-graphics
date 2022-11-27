@@ -17,6 +17,9 @@ private:
 
     float theta = 0.0f;
     int thetaLoc = -1;
+
+    bool direction = true;
+    float speedFactor = 1.0f;
 };
 
 void Window::init()
@@ -25,8 +28,8 @@ void Window::init()
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Load shaders and initialize attribute buffers.
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "rotatingSquare1.vert");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "rotatingSquare1.frag");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "rotatingSquare.vert");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "rotatingSquare.frag");
     program.link();
     program.use();
 
@@ -48,11 +51,28 @@ void Window::init()
     vao.enableAttributeArray(positionLoc);
 
     thetaLoc = program.uniformLocation("uTheta");
+
+    setKeyCallback([this](tinygl::keyboard::Key key, int /*scancode*/, tinygl::input::Action action, tinygl::input::Modifier /*mods*/) {
+        // Direction.
+        if (key == tinygl::keyboard::Key::Right && action == tinygl::input::Action::Press) {
+            direction = false;
+        }
+        if (key == tinygl::keyboard::Key::Left && action == tinygl::input::Action::Press) {
+            direction = true;
+        }
+        // Speed.
+        if (key == tinygl::keyboard::Key::W && action == tinygl::input::Action::Press) {
+            speedFactor *= 1.5f;
+        }
+        if (key == tinygl::keyboard::Key::S && action == tinygl::input::Action::Press) {
+            speedFactor /= 1.5f;
+        }
+    });
 }
 
 void Window::processInput()
 {
-    if (getKey(tinygl::Key::Escape) == tinygl::KeyState::Press) {
+    if (getKey(tinygl::keyboard::Key::Escape) == tinygl::keyboard::KeyState::Press) {
         setShouldClose(true);
     }
 }
@@ -61,7 +81,7 @@ void Window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    theta += 0.1f;
+    theta += (direction ? 0.1f * speedFactor : -0.1f * speedFactor);
     program.setUniformValue(thetaLoc, theta);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

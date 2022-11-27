@@ -25,8 +25,8 @@ void Window::init()
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Load shaders and initialize attribute buffers.
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "rotatingSquare1.vert");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "rotatingSquare1.frag");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "rotatingSquare.vert");
+    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "rotatingSquare.frag");
     program.link();
     program.use();
 
@@ -52,7 +52,7 @@ void Window::init()
 
 void Window::processInput()
 {
-    if (getKey(tinygl::Key::Escape) == tinygl::KeyState::Press) {
+    if (getKey(tinygl::keyboard::Key::Escape) == tinygl::keyboard::KeyState::Press) {
         setShouldClose(true);
     }
 }
