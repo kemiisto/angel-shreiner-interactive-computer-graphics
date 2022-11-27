@@ -21,6 +21,7 @@ link_libraries(fmt::fmt spdlog::spdlog tinygl)
 
 set(CHAPTERS
     02
+    03
 )
 
 set(02
@@ -31,12 +32,16 @@ set(02
     gasket4
 )
 
+set(03
+    rotatingSquare1
+)
+
 foreach(CHAPTER ${CHAPTERS})
     message(STATUS "Configuring demos for chapter ${CHAPTER}")
     foreach(DEMO ${${CHAPTER}})
         message(STATUS "Configuring demo ${DEMO}")
         set(NAME ${CHAPTER}-${DEMO})
-        add_executable(${NAME} ${CHAPTERS}/${DEMO}.cpp)
+        add_executable(${NAME} ${CHAPTER}/${DEMO}.cpp)
         target_compile_definitions(${NAME} PRIVATE NAME="${NAME}")
         file(GLOB SHADERS ${CHAPTERS}/*.frag ${CHAPTERS}/*.vert)
         foreach(SHADER ${SHADERS})
