@@ -44,7 +44,7 @@ void Window::init()
     // Load the data into the GPU
     vao.bind();
     vBuffer.bind();
-    vBuffer.fill(vertices.begin(), vertices.end());
+    vBuffer.create(vertices.begin(), vertices.end());
 
     // Associate shader variables with our data buffer
     auto positionLoc = program.attributeLocation("aPosition");

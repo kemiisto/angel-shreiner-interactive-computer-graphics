@@ -98,14 +98,14 @@ void Window::init()
     vao.bind();
 
     vBuffer.bind();
-    vBuffer.fill(positions.begin(), positions.end());
+    vBuffer.create(positions.begin(), positions.end());
 
     auto positionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(positionLoc);
 
     cBuffer.bind();
-    cBuffer.fill(colors.begin(), colors.end());
+    cBuffer.create(colors.begin(), colors.end());
 
     auto colorLoc = program.attributeLocation("aColor");
     vao.setAttributeArray(colorLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);

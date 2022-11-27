@@ -43,11 +43,11 @@ void Window::init()
             const auto [x, y] = getCursorPos();
             const auto [width, height] = getWindowSize();
             auto p = glm::vec2{2 * x / width - 1, 2 * (height - y) / height - 1};
-            vBuffer.write(sizeof(p) * index, glm::value_ptr(p), sizeof(p));
+            vBuffer.update(sizeof(p) * index, sizeof(p), glm::value_ptr(p));
 
             cBuffer.bind();
             auto c = colors.at(index%7);
-            cBuffer.write(sizeof(c) * index, glm::value_ptr(c), sizeof(c));
+            cBuffer.update(sizeof(c) * index, sizeof(c), glm::value_ptr(c));
 
             index++;
         }
@@ -66,14 +66,14 @@ void Window::init()
     vao.bind();
 
     vBuffer.bind();
-    vBuffer.allocate(sizeof(glm::vec2) * maxNumPositions);
+    vBuffer.create(sizeof(glm::vec2) * maxNumPositions);
 
     auto positionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(positionLoc);
 
     cBuffer.bind();
-    cBuffer.allocate(sizeof(glm::vec4) * maxNumPositions);
+    cBuffer.create(sizeof(glm::vec4) * maxNumPositions);
 
     auto colorLoc = program.attributeLocation("aColor");
     vao.setAttributeArray(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);

@@ -72,14 +72,14 @@ void Window::init()
     vao.bind();
 
     vboPositions.bind();
-    vboPositions.fill(positions.begin(), positions.end());
+    vboPositions.create(positions.begin(), positions.end());
 
     auto vertexPositionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(vertexPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(vertexPositionLoc);
 
     vboColors.bind();
-    vboColors.fill(colors.begin(), colors.end());
+    vboColors.create(colors.begin(), colors.end());
 
     auto colorLoc = program.attributeLocation("aColor");
     vao.setAttributeArray(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
