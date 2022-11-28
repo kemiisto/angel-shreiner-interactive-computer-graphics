@@ -10,6 +10,7 @@ public:
     void init() override;
     void processInput() override;
     void draw() override;
+    void drawUi() override;
 private:
     tinygl::ShaderProgram program;
     tinygl::Buffer vBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
@@ -54,18 +55,13 @@ void Window::init()
     thetaLoc = program.uniformLocation("uTheta");
 
     setKeyCallback([this](tinygl::keyboard::Key key, int /*scancode*/, tinygl::input::Action action, tinygl::input::Modifier /*mods*/) {
-        // Direction.
-        if (key == tinygl::keyboard::Key::Right && action == tinygl::input::Action::Press) {
-            direction = false;
+        if (key == tinygl::keyboard::Key::D1 && action == tinygl::input::Action::Press) {
+            direction = !direction;
         }
-        if (key == tinygl::keyboard::Key::Left && action == tinygl::input::Action::Press) {
-            direction = true;
-        }
-        // Speed.
-        if (key == tinygl::keyboard::Key::W && action == tinygl::input::Action::Press) {
+        if (key == tinygl::keyboard::Key::D2 && action == tinygl::input::Action::Press) {
             speedFactor *= 1.5f;
         }
-        if (key == tinygl::keyboard::Key::S && action == tinygl::input::Action::Press) {
+        if (key == tinygl::keyboard::Key::D3 && action == tinygl::input::Action::Press) {
             speedFactor /= 1.5f;
         }
     });
@@ -86,6 +82,37 @@ void Window::draw()
     program.setUniformValue(thetaLoc, theta);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
+void Window::drawUi()
+{
+    ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+
+    if (ImGui::Button("Change Rotation Direction")) {
+        direction = !direction;
+    }
+
+    static int item = 0;
+    static const char* const items[] = {
+        "Toggle Rotation Direction",
+        "Spin Faster",
+        "Spin Slower"
+    };
+    if (ImGui::ListBox("Toggles", &item, items, IM_ARRAYSIZE(items), 3)) {
+        switch (item) {
+            case 0:
+                direction = !direction;
+                break;
+            case 1:
+                speedFactor *= 1.5f;
+                break;
+            case 2:
+                speedFactor /= 1.5f;
+                break;
+        }
+    }
+
+    ImGui::End();
 }
 
 MAIN
