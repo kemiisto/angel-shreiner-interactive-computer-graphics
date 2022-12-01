@@ -16,7 +16,7 @@ find_package(spdlog CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
 add_subdirectory(tinygl)
-include_directories(src tinygl/include)
+include_directories(src tinygl/include tinygl/imgui)
 link_libraries(fmt::fmt spdlog::spdlog tinygl)
 
 set(CHAPTERS
