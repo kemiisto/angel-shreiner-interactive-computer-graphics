@@ -36,6 +36,7 @@ set(03
     rotatingSquare1
     rotatingSquare2
     square
+    cad1
 )
 
 foreach(CHAPTER ${CHAPTERS})
