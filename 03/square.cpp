@@ -1,20 +1,17 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
-#include <glm/vec2.hpp>
-#include <glm/vec4.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 constexpr auto maxNumTriangles = 200;
 constexpr auto maxNumPositions  = 3 * maxNumTriangles;
 
 constexpr std::array colors = {
-    glm::vec4{0.0, 0.0, 0.0, 1.0},  // black
-    glm::vec4{1.0, 0.0, 0.0, 1.0},  // red
-    glm::vec4{1.0, 1.0, 0.0, 1.0},  // yellow
-    glm::vec4{0.0, 1.0, 0.0, 1.0},  // green
-    glm::vec4{0.0, 0.0, 1.0, 1.0},  // blue
-    glm::vec4{1.0, 0.0, 1.0, 1.0},  // magenta
-    glm::vec4{0.0, 1.0, 1.0, 1.0}   // cyan
+    tinygl::Vec4{0.0, 0.0, 0.0, 1.0},  // black
+    tinygl::Vec4{1.0, 0.0, 0.0, 1.0},  // red
+    tinygl::Vec4{1.0, 1.0, 0.0, 1.0},  // yellow
+    tinygl::Vec4{0.0, 1.0, 0.0, 1.0},  // green
+    tinygl::Vec4{0.0, 0.0, 1.0, 1.0},  // blue
+    tinygl::Vec4{1.0, 0.0, 1.0, 1.0},  // magenta
+    tinygl::Vec4{0.0, 1.0, 1.0, 1.0}   // cyan
 };
 
 class Window final : public tinygl::Window
@@ -41,13 +38,13 @@ void Window::init()
         if (button == tinygl::mouse::Button::Left && action == tinygl::input::Action::Press) {
             vBuffer.bind();
             const auto [x, y] = getCursorPos();
-            const auto [width, height] = getWindowSize();
-            auto p = glm::vec2{2 * x / width - 1, 2 * (height - y) / height - 1};
-            vBuffer.update(sizeof(p) * index, sizeof(p), glm::value_ptr(p));
+            const auto [w, h] = getWindowSize();
+            auto p = tinygl::Vec2{static_cast<float>(2*x/w - 1), static_cast<float>(2*(h-y)/h - 1)};
+            vBuffer.update(sizeof(p) * index, sizeof(p), p.data());
 
             cBuffer.bind();
             auto c = colors.at(index%7);
-            cBuffer.update(sizeof(c) * index, sizeof(c), glm::value_ptr(c));
+            cBuffer.update(sizeof(c) * index, sizeof(c), c.data());
 
             index++;
         }
@@ -66,14 +63,14 @@ void Window::init()
     vao.bind();
 
     vBuffer.bind();
-    vBuffer.create(sizeof(glm::vec2) * maxNumPositions);
+    vBuffer.create(sizeof(tinygl::Vec2) * maxNumPositions);
 
     auto positionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(positionLoc);
 
     cBuffer.bind();
-    cBuffer.create(sizeof(glm::vec4) * maxNumPositions);
+    cBuffer.create(sizeof(tinygl::Vec4) * maxNumPositions);
 
     auto colorLoc = program.attributeLocation("aColor");
     vao.setAttributeArray(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);

@@ -1,19 +1,13 @@
 cmake_minimum_required(VERSION 3.2)
 
-if(WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-    set(CMAKE_TOOLCHAIN_FILE "c:/Users/$ENV{USERNAME}/Downloads/vcpkg/scripts/buildsystems/vcpkg.cmake")
-endif()
-
 project(interactive-computer-graphics)
 
 set(CMAKE_CXX_STANDARD 20)
 
 include_directories(include)
 
-find_package(glfw3 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
-find_package(glm CONFIG REQUIRED)
 
 add_subdirectory(tinygl)
 include_directories(src tinygl/include tinygl/imgui)
@@ -46,7 +40,7 @@ foreach(CHAPTER ${CHAPTERS})
         set(NAME ${CHAPTER}-${DEMO})
         add_executable(${NAME} ${CHAPTER}/${DEMO}.cpp)
         target_compile_definitions(${NAME} PRIVATE NAME="${NAME}")
-        file(GLOB SHADERS ${CHAPTERS}/*.frag ${CHAPTERS}/*.vert)
+        file(GLOB SHADERS ${CHAPTER}/*.frag ${CHAPTER}/*.vert)
         foreach(SHADER ${SHADERS})
             add_custom_command(TARGET ${NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SHADER} $<TARGET_FILE_DIR:${NAME}>)
         endforeach(SHADER)

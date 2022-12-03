@@ -1,7 +1,5 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
 #include <random>
 
 constexpr int numPositions = 5000;
@@ -22,22 +20,22 @@ private:
 
 void Window::init()
 {
-    std::vector<glm::vec3> positions;
+    std::vector<tinygl::Vec3> positions;
     positions.reserve(numPositions);
 
-    std::vector<glm::vec4> colors;
+    std::vector<tinygl::Vec4> colors;
     colors.reserve(numPositions);
 
     // First, initialize the vertices of our 3D gasket.
-    glm::vec3 vertices[] = {
+    tinygl::Vec3 vertices[] = {
         {-0.5f, -0.5f, -0.5f},
         { 0.5f, -0.5f, -0.5f},
         { 0.0f,  0.5f,  0.0f},
         { 0.0f, -0.5f,  0.5f}
     };
 
-    positions.emplace_back(0.0f, 0.0f, 0.0f);
-    colors.emplace_back(0.5f, 0.5f, 0.5f, 1.0f);
+    positions.emplace_back(std::initializer_list<float>{0.0f, 0.0f, 0.0f});
+    colors.emplace_back(std::initializer_list<float>{0.5f, 0.5f, 0.5f, 1.0f});
 
     std::random_device device;
     std::mt19937 engine(device());
@@ -50,10 +48,12 @@ void Window::init()
         auto newPosition = 0.5f * (positions[i] + vertices[j]);
         positions.push_back(newPosition);
         colors.emplace_back(
-            (1.0f + newPosition[0]) / 2.0f,
-            (1.0f + newPosition[1]) / 2.0f,
-            (1.0f + newPosition[2]) / 2.0f,
-            1.0f
+            std::initializer_list<float> {
+                (1.0f + newPosition[0]) / 2.0f,
+                (1.0f + newPosition[1]) / 2.0f,
+                (1.0f + newPosition[2]) / 2.0f,
+                1.0f
+            }
         );
     }
 

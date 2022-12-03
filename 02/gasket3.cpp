@@ -1,6 +1,5 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
-#include <glm/vec3.hpp>
 #include <random>
 
 constexpr int numPositions = 5000;
@@ -20,18 +19,18 @@ private:
 
 void Window::init()
 {
-    std::vector<glm::vec3> positions;
+    std::vector<tinygl::Vec3> positions;
     positions.reserve(numPositions);
 
     // First, initialize the vertices of our 3D gasket.
-    glm::vec3 vertices[] = {
-        { -0.5f, -0.5f, -0.5f },
-        {  0.5f, -0.5f, -0.5f },
-        {  0.0f,  0.5f,  0.0f },
-        {  0.0f, -0.5f,  0.5f }
+    tinygl::Vec3 vertices[] = {
+        {-0.5f, -0.5f, -0.5f},
+        { 0.5f, -0.5f, -0.5f},
+        { 0.0f,  0.5f,  0.0f},
+        { 0.0f, -0.5f,  0.5f}
     };
 
-    positions.emplace_back(0.0f, 0.0f, 0.0f);
+    positions.emplace_back(std::initializer_list<float>{0.0f, 0.0f, 0.0f});
 
     std::random_device device;
     std::mt19937 engine(device());

@@ -1,6 +1,5 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
-#include <glm/vec2.hpp>
 #include <array>
 
 class Window final : public tinygl::Window
@@ -36,10 +35,10 @@ void Window::init()
     program.use();
 
     std::array vertices = {
-        glm::vec2{ 0.0f,  1.0f},
-        glm::vec2{-1.0f,  0.0f},
-        glm::vec2{ 1.0f,  0.0f},
-        glm::vec2{ 0.0f, -1.0f}
+        tinygl::Vec2{ 0.0f,  1.0f},
+        tinygl::Vec2{-1.0f,  0.0f},
+        tinygl::Vec2{ 1.0f,  0.0f},
+        tinygl::Vec2{ 0.0f, -1.0f}
     };
 
     // Load the data into the GPU

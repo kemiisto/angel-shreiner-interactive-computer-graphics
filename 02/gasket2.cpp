@@ -1,19 +1,18 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
-#include <glm/vec2.hpp>
 
 constexpr int numTimesToSubdivide = 5;
 
-std::vector<glm::vec2> positions;
+std::vector<tinygl::Vec2> positions;
 
-void triangle(const glm::vec2& a, const glm::vec2& b, const glm::vec2& c)
+void triangle(const tinygl::Vec2& a, const tinygl::Vec2& b, const tinygl::Vec2& c)
 {
     positions.push_back(a);
     positions.push_back(b);
     positions.push_back(c);
 }
 
-void divideTriangle(const glm::vec2& a, const glm::vec2& b, const glm::vec2& c, int count)
+void divideTriangle(const tinygl::Vec2& a, const tinygl::Vec2& b, const tinygl::Vec2& c, int count)
 {
     // check for end of recursion
     if (count == 0) {
@@ -47,7 +46,7 @@ private:
 void Window::init()
 {
     // First, initialize the corners of our gasket with three positions.
-    glm::vec2 vertices[] = {
+    tinygl::Vec2 vertices[] = {
         { -1.0f, -1.0f },
         {  0.0f,  1.0f },
         {  1.0f, -1.0f }

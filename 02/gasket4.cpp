@@ -1,20 +1,19 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
-#include <glm/vec3.hpp>
 #include <array>
 
 constexpr int numTimesToSubdivide = 3;
 const std::array baseColors = {
-    glm::vec3{1.0f, 0.0f, 0.0f},
-    glm::vec3{0.0f, 1.0f, 0.0f},
-    glm::vec3{0.0f, 0.0f, 1.0f},
-    glm::vec3{0.0f, 0.0f, 0.0f}
+    tinygl::Vec3{1.0f, 0.0f, 0.0f},
+    tinygl::Vec3{0.0f, 1.0f, 0.0f},
+    tinygl::Vec3{0.0f, 0.0f, 1.0f},
+    tinygl::Vec3{0.0f, 0.0f, 0.0f}
 };
 
-std::vector<glm::vec3> positions;
-std::vector<glm::vec3> colors;
+std::vector<tinygl::Vec3> positions;
+std::vector<tinygl::Vec3> colors;
 
-void triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, int color)
+void triangle(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& c, int color)
 {
     // add colors and vertices for one triangle
     colors.push_back(baseColors.at(color));
@@ -25,7 +24,7 @@ void triangle(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, int co
     positions.push_back(c);
 }
 
-void tetra(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, const glm::vec3& d)
+void tetra(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& c, const tinygl::Vec3& d)
 {
     // tetrahedron with each side using a different color
     triangle(a, c, b, 0);
@@ -34,7 +33,7 @@ void tetra(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, const glm
     triangle(b, c, d, 3);
 }
 
-void divideTetra(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, const glm::vec3& d, int count)
+void divideTetra(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& c, const tinygl::Vec3& d, int count)
 {
     // check for end of recursion
     if (count == 0) {
@@ -74,7 +73,7 @@ private:
 void Window::init()
 {
     // First, initialize the corners of our gasket with three positions.
-    glm::vec3 vertices[] = {
+    tinygl::Vec3 vertices[] = {
         {  0.0000,  0.0000, -1.0000 },
         {  0.0000,  0.9428,  0.3333 },
         { -0.8165, -0.4714,  0.3333 },

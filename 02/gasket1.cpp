@@ -1,6 +1,5 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
-#include <glm/vec2.hpp>
 #include <random>
 
 constexpr int numPositions = 5000;
@@ -20,11 +19,11 @@ private:
 
 void Window::init()
 {
-    std::vector<glm::vec2> positions;
+    std::vector<tinygl::Vec2> positions;
     positions.reserve(numPositions);
 
     // First, initialize the corners of our gasket with three positions.
-    glm::vec2 vertices[] = {
+    tinygl::Vec2 vertices[] = {
         { -1.0f, -1.0f },
         {  0.0f,  1.0f },
         {  1.0f, -1.0f }
