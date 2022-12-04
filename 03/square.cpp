@@ -37,7 +37,7 @@ void Window::init()
             tinygl::input::Modifier /* modifier */) {
         if (button == tinygl::mouse::Button::Left && action == tinygl::input::Action::Press) {
             vBuffer.bind();
-            const auto [x, y] = getCursorPos();
+            const auto [x, y] = getCursorPos<float>();
             const auto [w, h] = getWindowSize();
             auto p = tinygl::Vec2{static_cast<float>(2*x/w - 1), static_cast<float>(2*(h-y)/h - 1)};
             vBuffer.update(sizeof(p) * index, sizeof(p), p.data());

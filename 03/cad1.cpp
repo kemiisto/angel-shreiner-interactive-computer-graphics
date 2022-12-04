@@ -64,14 +64,14 @@ void Window::init()
         tinygl::input::Action action,
         tinygl::input::Modifier /* modifier */) {
         if (button == tinygl::mouse::Button::Left && action == tinygl::input::Action::Press) {
-            const auto [x, y] = getCursorPos();
+            const auto [x, y] = getCursorPos<float>();
             const auto [w, h] = getWindowSize();
             if (first) {
                 first = false;
-                t[0] = tinygl::Vec2{static_cast<float>(2*x/w - 1), static_cast<float>(2*(h-y)/h - 1)};
+                t[0] = tinygl::Vec2{2*x/w - 1, 2*(h-y)/h - 1};
             } else {
                 first = true;
-                t[2] = tinygl::Vec2{static_cast<float>(2*x/w - 1), static_cast<float>(2*(h-y)/h - 1)};
+                t[2] = tinygl::Vec2{2*x/w - 1, 2*(h-y)/h - 1};
                 t[1] = tinygl::Vec2{t[0][0], t[2][1]};
                 t[3] = tinygl::Vec2{t[2][0], t[0][1]};
 
