@@ -30,7 +30,7 @@ void Window::init()
         { 0.0f, -0.5f,  0.5f}
     };
 
-    positions.emplace_back(std::initializer_list<float>{0.0f, 0.0f, 0.0f});
+    positions.emplace_back(0.0f, 0.0f, 0.0f);
 
     std::random_device device;
     std::mt19937 engine(device());

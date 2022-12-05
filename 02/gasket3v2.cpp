@@ -34,8 +34,8 @@ void Window::init()
         { 0.0f, -0.5f,  0.5f}
     };
 
-    positions.emplace_back(std::initializer_list<float>{0.0f, 0.0f, 0.0f});
-    colors.emplace_back(std::initializer_list<float>{0.5f, 0.5f, 0.5f, 1.0f});
+    positions.emplace_back(0.0f, 0.0f, 0.0f);
+    colors.emplace_back(0.5f, 0.5f, 0.5f, 1.0f);
 
     std::random_device device;
     std::mt19937 engine(device());
@@ -48,12 +48,10 @@ void Window::init()
         auto newPosition = 0.5f * (positions[i] + vertices[j]);
         positions.push_back(newPosition);
         colors.emplace_back(
-            std::initializer_list<float> {
-                (1.0f + newPosition[0]) / 2.0f,
-                (1.0f + newPosition[1]) / 2.0f,
-                (1.0f + newPosition[2]) / 2.0f,
-                1.0f
-            }
+            (1.0f + newPosition[0]) / 2.0f,
+            (1.0f + newPosition[1]) / 2.0f,
+            (1.0f + newPosition[2]) / 2.0f,
+            1.0f
         );
     }
 
