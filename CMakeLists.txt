@@ -16,6 +16,7 @@ link_libraries(fmt::fmt spdlog::spdlog tinygl)
 set(CHAPTERS
     02
     03
+    04
 )
 
 set(02
@@ -33,6 +34,9 @@ set(03
     cad1
     cad2
 )
+
+set(04
+    cube)
 
 foreach(CHAPTER ${CHAPTERS})
     message(STATUS "Configuring demos for chapter ${CHAPTER}")
