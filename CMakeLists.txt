@@ -6,6 +6,12 @@ set(CMAKE_CXX_STANDARD 20)
 
 include_directories(include)
 
+if (MSVC)
+    add_compile_options(/W3 /WX)
+else()
+    add_compile_options(-Wall -Wextra -pedantic -Werror)
+endif()
+
 find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
@@ -36,7 +42,8 @@ set(03
 )
 
 set(04
-    cube)
+    cube
+    cubev)
 
 foreach(CHAPTER ${CHAPTERS})
     message(STATUS "Configuring demos for chapter ${CHAPTER}")
