@@ -7,6 +7,28 @@ constexpr int xAxis = 0;
 constexpr int yAxis = 1;
 constexpr int zAxis = 2;
 
+constexpr std::array vertices = {
+    tinygl::Vec4{-0.5f, -0.5f,  0.5f, 1.0f},
+    tinygl::Vec4{-0.5f,  0.5f,  0.5f, 1.0f},
+    tinygl::Vec4{ 0.5f,  0.5f,  0.5f, 1.0f},
+    tinygl::Vec4{ 0.5f, -0.5f,  0.5f, 1.0f},
+    tinygl::Vec4{-0.5f, -0.5f, -0.5f, 1.0f},
+    tinygl::Vec4{-0.5f,  0.5f, -0.5f, 1.0f},
+    tinygl::Vec4{ 0.5f,  0.5f, -0.5f, 1.0f},
+    tinygl::Vec4{ 0.5f, -0.5f, -0.5f, 1.0f}
+};
+
+constexpr std::array vertexColors = {
+    tinygl::Vec4{0.0f, 0.0f, 0.0f, 1.0f},  // black
+    tinygl::Vec4{1.0f, 0.0f, 0.0f, 1.0f},  // red
+    tinygl::Vec4{1.0f, 1.0f, 0.0f, 1.0f},  // yellow
+    tinygl::Vec4{0.0f, 1.0f, 0.0f, 1.0f},  // green
+    tinygl::Vec4{0.0f, 0.0f, 1.0f, 1.0f},  // blue
+    tinygl::Vec4{1.0f, 0.0f, 1.0f, 1.0f},  // magenta
+    tinygl::Vec4{0.0f, 1.0f, 1.0f, 1.0f},  // cyan
+    tinygl::Vec4{1.0f, 1.0f, 1.0f, 1.0f}   // white
+};
+
 class Window final : public tinygl::Window
 {
 public:
@@ -127,32 +149,10 @@ void Window::colorCube()
 
 void Window::quad(int a, int b, int c, int d)
 {
-    std::array vertices = {
-        tinygl::Vec4{-0.5f, -0.5f,  0.5f, 1.0f},
-        tinygl::Vec4{-0.5f,  0.5f,  0.5f, 1.0f},
-        tinygl::Vec4{ 0.5f,  0.5f,  0.5f, 1.0f},
-        tinygl::Vec4{ 0.5f, -0.5f,  0.5f, 1.0f},
-        tinygl::Vec4{-0.5f, -0.5f, -0.5f, 1.0f},
-        tinygl::Vec4{-0.5f,  0.5f, -0.5f, 1.0f},
-        tinygl::Vec4{ 0.5f,  0.5f, -0.5f, 1.0f},
-        tinygl::Vec4{ 0.5f, -0.5f, -0.5f, 1.0f}
-    };
-
-    std::array vertexColors = {
-        tinygl::Vec4{0.0f, 0.0f, 0.0f, 1.0f},  // black
-        tinygl::Vec4{1.0f, 0.0f, 0.0f, 1.0f},  // red
-        tinygl::Vec4{1.0f, 1.0f, 0.0f, 1.0f},  // yellow
-        tinygl::Vec4{0.0f, 1.0f, 0.0f, 1.0f},  // green
-        tinygl::Vec4{0.0f, 0.0f, 1.0f, 1.0f},  // blue
-        tinygl::Vec4{1.0f, 0.0f, 1.0f, 1.0f},  // magenta
-        tinygl::Vec4{0.0f, 1.0f, 1.0f, 1.0f},  // cyan
-        tinygl::Vec4{1.0f, 1.0f, 1.0f, 1.0f}   // white
-    };
-
     // We need to partition the quad into two triangles in order for OpenGL to be able to render it.
     // In this case, we create two triangles from the quad indices.
 
-    //vertex color assigned by the index of the vertex
+    // vertex color assigned by the index of the vertex
     std::array indices = {a, b, c, a, c, d};
 
     for (int i : indices) {
