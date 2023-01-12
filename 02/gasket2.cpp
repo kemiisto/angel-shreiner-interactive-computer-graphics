@@ -85,7 +85,7 @@ void Window::processInput()
 void Window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, positions.size());
+    glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(positions.size()));
 }
 
 MAIN

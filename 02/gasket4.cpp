@@ -74,10 +74,10 @@ void Window::init()
 {
     // First, initialize the corners of our gasket with three positions.
     tinygl::Vec3 vertices[] = {
-        {  0.0000,  0.0000, -1.0000 },
-        {  0.0000,  0.9428,  0.3333 },
-        { -0.8165, -0.4714,  0.3333 },
-        {  0.8165, -0.4714,  0.3333 }
+        {  0.0000f,  0.0000f, -1.0000f },
+        {  0.0000f,  0.9428f,  0.3333f },
+        { -0.8165f, -0.4714f,  0.3333f },
+        {  0.8165f, -0.4714f,  0.3333f }
     };
 
     divideTetra(vertices[0], vertices[1], vertices[2], vertices[3], numTimesToSubdivide);
@@ -121,7 +121,7 @@ void Window::processInput()
 void Window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, positions.size());
+    glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(positions.size()));
 }
 
 MAIN
