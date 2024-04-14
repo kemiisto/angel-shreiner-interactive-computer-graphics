@@ -5,13 +5,13 @@ constexpr auto maxNumTriangles = 200;
 constexpr auto maxNumPositions  = 3 * maxNumTriangles;
 
 constexpr std::array colors = {
-    tinygl::Vec4{0.0, 0.0, 0.0, 1.0},  // black
-    tinygl::Vec4{1.0, 0.0, 0.0, 1.0},  // red
-    tinygl::Vec4{1.0, 1.0, 0.0, 1.0},  // yellow
-    tinygl::Vec4{0.0, 1.0, 0.0, 1.0},  // green
-    tinygl::Vec4{0.0, 0.0, 1.0, 1.0},  // blue
-    tinygl::Vec4{1.0, 0.0, 1.0, 1.0},  // magenta
-    tinygl::Vec4{0.0, 1.0, 1.0, 1.0}   // cyan
+    tinygl::Vec4{0.0f, 0.0f, 0.0f, 1.0f},  // black
+    tinygl::Vec4{1.0f, 0.0f, 0.0f, 1.0f},  // red
+    tinygl::Vec4{1.0f, 1.0f, 0.0f, 1.0f},  // yellow
+    tinygl::Vec4{0.0f, 1.0f, 0.0f, 1.0f},  // green
+    tinygl::Vec4{0.0f, 0.0f, 1.0f, 1.0f},  // blue
+    tinygl::Vec4{1.0f, 0.0f, 1.0f, 1.0f},  // magenta
+    tinygl::Vec4{0.0f, 1.0f, 1.0f, 1.0f}   // cyan
 };
 
 class Window final : public tinygl::Window
