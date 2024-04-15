@@ -1,6 +1,8 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
+#include <array>
 #include <random>
+#include <vector>
 
 constexpr int numPositions = 5000;
 
@@ -19,29 +21,29 @@ private:
 
 void Window::init()
 {
-    std::vector<tinygl::Vec2> positions;
+    auto positions = std::vector<tinygl::Vec2>{};
     positions.reserve(numPositions);
 
     // First, initialize the corners of our gasket with three positions.
-    tinygl::Vec2 vertices[] = {
-        { -1.0f, -1.0f },
-        {  0.0f,  1.0f },
-        {  1.0f, -1.0f }
+    auto vertices = std::array {
+        tinygl::Vec2{-1.0f, -1.0f},
+        tinygl::Vec2{ 0.0f,  1.0f},
+        tinygl::Vec2{ 1.0f, -1.0f}
     };
 
-    std::random_device device;
-    std::mt19937 engine(device());
-    std::uniform_int_distribution<int> distribution(0, 2);
+    auto device = std::random_device{};
+    auto engine= std::mt19937{device()};
+    auto distribution = std::uniform_int_distribution<int>{0, 2};
 
     // Specify a starting positions for our iterations - it must lie inside any set of three vertices
-    auto u = vertices[0] + vertices[1];
-    auto v = vertices[0] + vertices[2];
+    auto const u = vertices[0] + vertices[1];
+    auto const v = vertices[0] + vertices[2];
     positions.emplace_back(0.25f * (u + v));
 
     // Compute new positions
     // Each new point is located midway between last point and a randomly chosen vertex
     for (int i = 0; i < numPositions; ++i) {
-        auto j = distribution(engine);
+        auto const j = distribution(engine);
         positions.emplace_back(0.5f * (positions[i] + vertices[j]));
     }
 
@@ -61,7 +63,7 @@ void Window::init()
     vBuffer.create(positions.begin(), positions.end());
 
     // Associate shader variables with our data buffer
-    auto positionLoc = program.attributeLocation("aPosition");
+    auto const positionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(positionLoc);
 }
