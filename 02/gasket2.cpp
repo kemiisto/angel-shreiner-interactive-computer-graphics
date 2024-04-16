@@ -1,9 +1,11 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
+#include <array>
+#include <vector>
 
 constexpr int numTimesToSubdivide = 5;
 
-std::vector<tinygl::Vec2> positions;
+auto positions = std::vector<tinygl::Vec2>{};
 
 void triangle(const tinygl::Vec2& a, const tinygl::Vec2& b, const tinygl::Vec2& c)
 {
@@ -18,10 +20,10 @@ void divideTriangle(const tinygl::Vec2& a, const tinygl::Vec2& b, const tinygl::
     if (count == 0) {
         triangle(a, b, c);
     } else {
-        //bisect the sides
-        auto ab = 0.5f * (a + b);
-        auto ac = 0.5f * (a + c);
-        auto bc = 0.5f * (b + c);
+        // bisect the sides
+        auto const ab = 0.5f * (a + b);
+        auto const ac = 0.5f * (a + c);
+        auto const bc = 0.5f * (b + c);
         --count;
         // three new triangles
         divideTriangle(a, ab, ac, count);
@@ -46,10 +48,10 @@ private:
 void Window::init()
 {
     // First, initialize the corners of our gasket with three positions.
-    tinygl::Vec2 vertices[] = {
-        { -1.0f, -1.0f },
-        {  0.0f,  1.0f },
-        {  1.0f, -1.0f }
+    auto const vertices = std::array {
+        tinygl::Vec2{-1.0f, -1.0f},
+        tinygl::Vec2{ 0.0f,  1.0f},
+        tinygl::Vec2{ 1.0f, -1.0f}
     };
 
     divideTriangle(vertices[0], vertices[1], vertices[2], numTimesToSubdivide);
@@ -70,7 +72,7 @@ void Window::init()
     vBuffer.create(positions.begin(), positions.end());
 
     // Associate shader variables with our data buffer
-    auto positionLoc = program.attributeLocation("aPosition");
+    auto const positionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(positionLoc);
 }

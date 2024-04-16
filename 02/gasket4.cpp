@@ -1,17 +1,19 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
 #include <array>
+#include <vector>
 
 constexpr int numTimesToSubdivide = 3;
-const std::array baseColors = {
+
+auto const baseColors = std::array {
     tinygl::Vec3{1.0f, 0.0f, 0.0f},
     tinygl::Vec3{0.0f, 1.0f, 0.0f},
     tinygl::Vec3{0.0f, 0.0f, 1.0f},
     tinygl::Vec3{0.0f, 0.0f, 0.0f}
 };
 
-std::vector<tinygl::Vec3> positions;
-std::vector<tinygl::Vec3> colors;
+auto positions = std::vector<tinygl::Vec3>{};
+auto colors = std::vector<tinygl::Vec3>{};
 
 void triangle(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& c, int color)
 {
@@ -40,12 +42,12 @@ void divideTetra(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec
         tetra(a, b, c, d);
     } else {
         // find midpoints of sides, divide four smaller tetrahedra
-        auto ab = 0.5f * (a + b);
-        auto ac = 0.5f * (a + c);
-        auto ad = 0.5f * (a + d);
-        auto bc = 0.5f * (b + c);
-        auto bd = 0.5f * (b + d);
-        auto cd = 0.5f * (c + d);
+        auto const ab = 0.5f * (a + b);
+        auto const ac = 0.5f * (a + c);
+        auto const ad = 0.5f * (a + d);
+        auto const bc = 0.5f * (b + c);
+        auto const bd = 0.5f * (b + d);
+        auto const cd = 0.5f * (c + d);
 
         --count;
 
@@ -73,11 +75,11 @@ private:
 void Window::init()
 {
     // First, initialize the corners of our gasket with three positions.
-    tinygl::Vec3 vertices[] = {
-        {  0.0000f,  0.0000f, -1.0000f },
-        {  0.0000f,  0.9428f,  0.3333f },
-        { -0.8165f, -0.4714f,  0.3333f },
-        {  0.8165f, -0.4714f,  0.3333f }
+    auto vertices = std::array {
+        tinygl::Vec3{ 0.0000f,  0.0000f, -1.0000f},
+        tinygl::Vec3{ 0.0000f,  0.9428f,  0.3333f},
+        tinygl::Vec3{-0.8165f, -0.4714f,  0.3333f},
+        tinygl::Vec3{ 0.8165f, -0.4714f,  0.3333f}
     };
 
     divideTetra(vertices[0], vertices[1], vertices[2], vertices[3], numTimesToSubdivide);
@@ -99,14 +101,14 @@ void Window::init()
     vBuffer.bind();
     vBuffer.create(positions.begin(), positions.end());
 
-    auto positionLoc = program.attributeLocation("aPosition");
+    auto const positionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(positionLoc);
 
     cBuffer.bind();
     cBuffer.create(colors.begin(), colors.end());
 
-    auto colorLoc = program.attributeLocation("aColor");
+    auto const colorLoc = program.attributeLocation("aColor");
     vao.setAttributeArray(colorLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(colorLoc);
 }

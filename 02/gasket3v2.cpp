@@ -1,6 +1,8 @@
 #include "../main.h"
 #include <tinygl/tinygl.h>
+#include <array>
 #include <random>
+#include <vector>
 
 constexpr int numPositions = 5000;
 
@@ -20,32 +22,32 @@ private:
 
 void Window::init()
 {
-    std::vector<tinygl::Vec3> positions;
+    auto positions = std::vector<tinygl::Vec3>{};
     positions.reserve(numPositions);
 
-    std::vector<tinygl::Vec4> colors;
+    auto colors = std::vector<tinygl::Vec4>{};
     colors.reserve(numPositions);
 
     // First, initialize the vertices of our 3D gasket.
-    tinygl::Vec3 vertices[] = {
-        {-0.5f, -0.5f, -0.5f},
-        { 0.5f, -0.5f, -0.5f},
-        { 0.0f,  0.5f,  0.0f},
-        { 0.0f, -0.5f,  0.5f}
+    auto vertices = std::array {
+        tinygl::Vec3{-0.5f, -0.5f, -0.5f},
+        tinygl::Vec3{ 0.5f, -0.5f, -0.5f},
+        tinygl::Vec3{ 0.0f,  0.5f,  0.0f},
+        tinygl::Vec3{ 0.0f, -0.5f,  0.5f}
     };
 
     positions.emplace_back(0.0f, 0.0f, 0.0f);
     colors.emplace_back(0.5f, 0.5f, 0.5f, 1.0f);
 
-    std::random_device device;
-    std::mt19937 engine(device());
-    std::uniform_int_distribution<int> distribution(0, 3);
+    auto device = std::random_device{};
+    auto engine= std::mt19937{device()};
+    auto distribution = std::uniform_int_distribution<int>{0, 3};
 
     // Compute new positions
     // Each new point is located midway between last point and a randomly chosen vertex
     for (int i = 0; i < numPositions; ++i) {
-        auto j = distribution(engine);
-        auto newPosition = 0.5f * (positions[i] + vertices[j]);
+        auto const j = distribution(engine);
+        auto const newPosition = 0.5f * (positions[i] + vertices[j]);
         positions.push_back(newPosition);
         colors.emplace_back(
             (1.0f + newPosition[0]) / 2.0f,
@@ -72,14 +74,14 @@ void Window::init()
     vboPositions.bind();
     vboPositions.create(positions.begin(), positions.end());
 
-    auto vertexPositionLoc = program.attributeLocation("aPosition");
+    auto const vertexPositionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(vertexPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(vertexPositionLoc);
 
     vboColors.bind();
     vboColors.create(colors.begin(), colors.end());
 
-    auto colorLoc = program.attributeLocation("aColor");
+    auto const colorLoc = program.attributeLocation("aColor");
     vao.setAttributeArray(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(colorLoc);
 }

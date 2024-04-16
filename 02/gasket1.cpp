@@ -25,7 +25,7 @@ void Window::init()
     positions.reserve(numPositions);
 
     // First, initialize the corners of our gasket with three positions.
-    auto vertices = std::array {
+    auto const vertices = std::array {
         tinygl::Vec2{-1.0f, -1.0f},
         tinygl::Vec2{ 0.0f,  1.0f},
         tinygl::Vec2{ 1.0f, -1.0f}
