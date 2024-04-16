@@ -51,7 +51,7 @@ void divideTetra(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec
 
         --count;
 
-        divideTetra(a, ab, ac, ad, count);
+        divideTetra( a, ab, ac, ad, count);
         divideTetra(ab,  b, bc, bd, count);
         divideTetra(ac, bc,  c, cd, count);
         divideTetra(ad, bd, cd,  d, count);
