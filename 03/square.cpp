@@ -5,13 +5,13 @@ constexpr auto maxNumTriangles = 200;
 constexpr auto maxNumPositions  = 3 * maxNumTriangles;
 
 constexpr std::array colors = {
-    tinygl::Vec4{0.0f, 0.0f, 0.0f, 1.0f},  // black
-    tinygl::Vec4{1.0f, 0.0f, 0.0f, 1.0f},  // red
-    tinygl::Vec4{1.0f, 1.0f, 0.0f, 1.0f},  // yellow
-    tinygl::Vec4{0.0f, 1.0f, 0.0f, 1.0f},  // green
-    tinygl::Vec4{0.0f, 0.0f, 1.0f, 1.0f},  // blue
-    tinygl::Vec4{1.0f, 0.0f, 1.0f, 1.0f},  // magenta
-    tinygl::Vec4{0.0f, 1.0f, 1.0f, 1.0f}   // cyan
+    tinyla::vec4f{0.0f, 0.0f, 0.0f, 1.0f},  // black
+    tinyla::vec4f{1.0f, 0.0f, 0.0f, 1.0f},  // red
+    tinyla::vec4f{1.0f, 1.0f, 0.0f, 1.0f},  // yellow
+    tinyla::vec4f{0.0f, 1.0f, 0.0f, 1.0f},  // green
+    tinyla::vec4f{0.0f, 0.0f, 1.0f, 1.0f},  // blue
+    tinyla::vec4f{1.0f, 0.0f, 1.0f, 1.0f},  // magenta
+    tinyla::vec4f{0.0f, 1.0f, 1.0f, 1.0f}   // cyan
 };
 
 class Window final : public tinygl::Window
@@ -39,7 +39,7 @@ void Window::init()
             vBuffer.bind();
             const auto [x, y] = getCursorPos<float>();
             const auto [w, h] = getWindowSize();
-            auto p = tinygl::Vec2{static_cast<float>(2*x/w - 1), static_cast<float>(2*(h-y)/h - 1)};
+            auto p = tinyla::vec2f{static_cast<float>(2*x/w - 1), static_cast<float>(2*(h-y)/h - 1)};
             vBuffer.update(sizeof(p) * index, sizeof(p), p.data());
 
             cBuffer.bind();
@@ -63,14 +63,14 @@ void Window::init()
     vao.bind();
 
     vBuffer.bind();
-    vBuffer.create(sizeof(tinygl::Vec2) * maxNumPositions);
+    vBuffer.create(sizeof(tinyla::vec2f) * maxNumPositions);
 
     auto positionLoc = program.attributeLocation("aPosition");
     vao.setAttributeArray(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
     vao.enableAttributeArray(positionLoc);
 
     cBuffer.bind();
-    cBuffer.create(sizeof(tinygl::Vec4) * maxNumPositions);
+    cBuffer.create(sizeof(tinyla::vec4f) * maxNumPositions);
 
     auto colorLoc = program.attributeLocation("aColor");
     vao.setAttributeArray(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);

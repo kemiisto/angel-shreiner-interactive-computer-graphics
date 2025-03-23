@@ -1,3 +1,3 @@
 [submodule "tinygl"]
 	path = tinygl
-	url = https://github.com/kemiisto/tinygl.git
+    url=git@github.com:kemiisto/tinygl.git

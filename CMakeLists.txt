@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.5)
 
 project(interactive-computer-graphics)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 include_directories(include)
 
@@ -19,7 +19,7 @@ find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
 add_subdirectory(tinygl)
-include_directories(src tinygl/include tinygl/imgui)
+include_directories(src tinygl/include tinygl/imgui tinygl/tinyla/include)
 link_libraries(fmt::fmt spdlog::spdlog tinygl)
 
 set(CHAPTERS

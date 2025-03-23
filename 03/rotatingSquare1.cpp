@@ -31,10 +31,10 @@ void Window::init()
     program.use();
 
     std::array vertices = {
-        tinygl::Vec2{ 0.0f,  1.0f},
-        tinygl::Vec2{-1.0f,  0.0f},
-        tinygl::Vec2{ 1.0f,  0.0f},
-        tinygl::Vec2{ 0.0f, -1.0f}
+        tinyla::vec2f{ 0.0f,  1.0f},
+        tinyla::vec2f{-1.0f,  0.0f},
+        tinyla::vec2f{ 1.0f,  0.0f},
+        tinyla::vec2f{ 0.0f, -1.0f}
     };
 
     // Load the data into the GPU

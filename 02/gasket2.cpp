@@ -5,16 +5,16 @@
 
 constexpr int numTimesToSubdivide = 5;
 
-auto positions = std::vector<tinygl::Vec2>{};
+auto positions = std::vector<tinyla::vec2f>{};
 
-void triangle(const tinygl::Vec2& a, const tinygl::Vec2& b, const tinygl::Vec2& c)
+void triangle(const tinyla::vec2f& a, const tinyla::vec2f& b, const tinyla::vec2f& c)
 {
     positions.push_back(a);
     positions.push_back(b);
     positions.push_back(c);
 }
 
-void divideTriangle(const tinygl::Vec2& a, const tinygl::Vec2& b, const tinygl::Vec2& c, int count)
+void divideTriangle(const tinyla::vec2f& a, const tinyla::vec2f& b, const tinyla::vec2f& c, int count)
 {
     // check for end of recursion
     if (count == 0) {
@@ -49,9 +49,9 @@ void Window::init()
 {
     // First, initialize the corners of our gasket with three positions.
     auto const vertices = std::array {
-        tinygl::Vec2{-1.0f, -1.0f},
-        tinygl::Vec2{ 0.0f,  1.0f},
-        tinygl::Vec2{ 1.0f, -1.0f}
+        tinyla::vec2f{-1.0f, -1.0f},
+        tinyla::vec2f{ 0.0f,  1.0f},
+        tinyla::vec2f{ 1.0f, -1.0f}
     };
 
     divideTriangle(vertices[0], vertices[1], vertices[2], numTimesToSubdivide);

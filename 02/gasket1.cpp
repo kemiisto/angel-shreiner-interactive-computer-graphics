@@ -21,18 +21,18 @@ private:
 
 void Window::init()
 {
-    auto positions = std::vector<tinygl::Vec2>{};
+    auto positions = std::vector<tinyla::vec2f>{};
     positions.reserve(numPositions);
 
     // First, initialize the corners of our gasket with three positions.
-    auto const vertices = std::array {
-        tinygl::Vec2{-1.0f, -1.0f},
-        tinygl::Vec2{ 0.0f,  1.0f},
-        tinygl::Vec2{ 1.0f, -1.0f}
+    constexpr auto vertices = std::array {
+        tinyla::vec2f{-1.0f, -1.0f},
+        tinyla::vec2f{ 0.0f,  1.0f},
+        tinyla::vec2f{ 1.0f, -1.0f}
     };
 
     auto device = std::random_device{};
-    auto engine= std::mt19937{device()};
+    auto engine = std::mt19937{device()};
     auto distribution = std::uniform_int_distribution<int>{0, 2};
 
     // Specify a starting positions for our iterations - it must lie inside any set of three vertices

@@ -6,16 +6,16 @@
 constexpr int numTimesToSubdivide = 3;
 
 auto const baseColors = std::array {
-    tinygl::Vec3{1.0f, 0.0f, 0.0f},
-    tinygl::Vec3{0.0f, 1.0f, 0.0f},
-    tinygl::Vec3{0.0f, 0.0f, 1.0f},
-    tinygl::Vec3{0.0f, 0.0f, 0.0f}
+    tinyla::vec3f{1.0f, 0.0f, 0.0f},
+    tinyla::vec3f{0.0f, 1.0f, 0.0f},
+    tinyla::vec3f{0.0f, 0.0f, 1.0f},
+    tinyla::vec3f{0.0f, 0.0f, 0.0f}
 };
 
-auto positions = std::vector<tinygl::Vec3>{};
-auto colors = std::vector<tinygl::Vec3>{};
+auto positions = std::vector<tinyla::vec3f>{};
+auto colors = std::vector<tinyla::vec3f>{};
 
-void triangle(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& c, int color)
+void triangle(const tinyla::vec3f& a, const tinyla::vec3f& b, const tinyla::vec3f& c, int color)
 {
     // add colors and vertices for one triangle
     colors.push_back(baseColors.at(color));
@@ -26,7 +26,7 @@ void triangle(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& 
     positions.push_back(c);
 }
 
-void tetra(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& c, const tinygl::Vec3& d)
+void tetra(const tinyla::vec3f& a, const tinyla::vec3f& b, const tinyla::vec3f& c, const tinyla::vec3f& d)
 {
     // tetrahedron with each side using a different color
     triangle(a, c, b, 0);
@@ -35,7 +35,7 @@ void tetra(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& c, 
     triangle(b, c, d, 3);
 }
 
-void divideTetra(const tinygl::Vec3& a, const tinygl::Vec3& b, const tinygl::Vec3& c, const tinygl::Vec3& d, int count)
+void divideTetra(const tinyla::vec3f& a, const tinyla::vec3f& b, const tinyla::vec3f& c, const tinyla::vec3f& d, int count)
 {
     // check for end of recursion
     if (count == 0) {
@@ -76,10 +76,10 @@ void Window::init()
 {
     // First, initialize the corners of our gasket with three positions.
     auto vertices = std::array {
-        tinygl::Vec3{ 0.0000f,  0.0000f, -1.0000f},
-        tinygl::Vec3{ 0.0000f,  0.9428f,  0.3333f},
-        tinygl::Vec3{-0.8165f, -0.4714f,  0.3333f},
-        tinygl::Vec3{ 0.8165f, -0.4714f,  0.3333f}
+        tinyla::vec3f{ 0.0000f,  0.0000f, -1.0000f},
+        tinyla::vec3f{ 0.0000f,  0.9428f,  0.3333f},
+        tinyla::vec3f{-0.8165f, -0.4714f,  0.3333f},
+        tinyla::vec3f{ 0.8165f, -0.4714f,  0.3333f}
     };
 
     divideTetra(vertices[0], vertices[1], vertices[2], vertices[3], numTimesToSubdivide);

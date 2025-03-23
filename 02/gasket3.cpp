@@ -21,15 +21,15 @@ private:
 
 void Window::init()
 {
-    auto positions = std::vector<tinygl::Vec3>{};
+    auto positions = std::vector<tinyla::vec3f>{};
     positions.reserve(numPositions);
 
     // First, initialize the vertices of our 3D gasket.
     auto const vertices = std::array {
-        tinygl::Vec3{-0.5f, -0.5f, -0.5f},
-        tinygl::Vec3{ 0.5f, -0.5f, -0.5f},
-        tinygl::Vec3{ 0.0f,  0.5f,  0.0f},
-        tinygl::Vec3{ 0.0f, -0.5f,  0.5f}
+        tinyla::vec3f{-0.5f, -0.5f, -0.5f},
+        tinyla::vec3f{ 0.5f, -0.5f, -0.5f},
+        tinyla::vec3f{ 0.0f,  0.5f,  0.0f},
+        tinyla::vec3f{ 0.0f, -0.5f,  0.5f}
     };
 
     positions.emplace_back(0.0f, 0.0f, 0.0f);

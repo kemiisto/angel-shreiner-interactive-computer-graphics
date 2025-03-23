@@ -8,25 +8,25 @@ constexpr int yAxis = 1;
 constexpr int zAxis = 2;
 
 constexpr std::array vertices = {
-    tinygl::Vec4{-0.5f, -0.5f,  0.5f, 1.0f},
-    tinygl::Vec4{-0.5f,  0.5f,  0.5f, 1.0f},
-    tinygl::Vec4{ 0.5f,  0.5f,  0.5f, 1.0f},
-    tinygl::Vec4{ 0.5f, -0.5f,  0.5f, 1.0f},
-    tinygl::Vec4{-0.5f, -0.5f, -0.5f, 1.0f},
-    tinygl::Vec4{-0.5f,  0.5f, -0.5f, 1.0f},
-    tinygl::Vec4{ 0.5f,  0.5f, -0.5f, 1.0f},
-    tinygl::Vec4{ 0.5f, -0.5f, -0.5f, 1.0f}
+    tinyla::vec4f{-0.5f, -0.5f,  0.5f, 1.0f},
+    tinyla::vec4f{-0.5f,  0.5f,  0.5f, 1.0f},
+    tinyla::vec4f{ 0.5f,  0.5f,  0.5f, 1.0f},
+    tinyla::vec4f{ 0.5f, -0.5f,  0.5f, 1.0f},
+    tinyla::vec4f{-0.5f, -0.5f, -0.5f, 1.0f},
+    tinyla::vec4f{-0.5f,  0.5f, -0.5f, 1.0f},
+    tinyla::vec4f{ 0.5f,  0.5f, -0.5f, 1.0f},
+    tinyla::vec4f{ 0.5f, -0.5f, -0.5f, 1.0f}
 };
 
 constexpr std::array vertexColors = {
-    tinygl::Vec4{0.0f, 0.0f, 0.0f, 1.0f},  // black
-    tinygl::Vec4{1.0f, 0.0f, 0.0f, 1.0f},  // red
-    tinygl::Vec4{1.0f, 1.0f, 0.0f, 1.0f},  // yellow
-    tinygl::Vec4{0.0f, 1.0f, 0.0f, 1.0f},  // green
-    tinygl::Vec4{0.0f, 0.0f, 1.0f, 1.0f},  // blue
-    tinygl::Vec4{1.0f, 0.0f, 1.0f, 1.0f},  // magenta
-    tinygl::Vec4{0.0f, 1.0f, 1.0f, 1.0f},  // cyan
-    tinygl::Vec4{1.0f, 1.0f, 1.0f, 1.0f}   // white
+    tinyla::vec4f{0.0f, 0.0f, 0.0f, 1.0f},  // black
+    tinyla::vec4f{1.0f, 0.0f, 0.0f, 1.0f},  // red
+    tinyla::vec4f{1.0f, 1.0f, 0.0f, 1.0f},  // yellow
+    tinyla::vec4f{0.0f, 1.0f, 0.0f, 1.0f},  // green
+    tinyla::vec4f{0.0f, 0.0f, 1.0f, 1.0f},  // blue
+    tinyla::vec4f{1.0f, 0.0f, 1.0f, 1.0f},  // magenta
+    tinyla::vec4f{0.0f, 1.0f, 1.0f, 1.0f},  // cyan
+    tinyla::vec4f{1.0f, 1.0f, 1.0f, 1.0f}   // white
 };
 
 // indices of the 12 triangles that comprise the cube
@@ -60,7 +60,7 @@ private:
     tinygl::Buffer iBuffer{tinygl::Buffer::Type::IndexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
     tinygl::VertexArrayObject vao;
 
-    tinygl::Vec3 theta{0.0f, 0.0f, 0.0f};
+    tinyla::vec3f theta{0.0f, 0.0f, 0.0f};
     int axis = 0;
     int thetaLoc{-1};
 };
