@@ -3,7 +3,7 @@
 #include <array>
 #include <vector>
 
-constexpr int numTimesToSubdivide = 5;
+constexpr int num_times_to_subdivide = 5;
 
 auto positions = std::vector<tinyla::vec2f>{};
 
@@ -14,7 +14,7 @@ void triangle(const tinyla::vec2f& a, const tinyla::vec2f& b, const tinyla::vec2
     positions.push_back(c);
 }
 
-void divideTriangle(const tinyla::vec2f& a, const tinyla::vec2f& b, const tinyla::vec2f& c, int count)
+void divide_triangle(const tinyla::vec2f& a, const tinyla::vec2f& b, const tinyla::vec2f& c, int count)
 {
     // check for end of recursion
     if (count == 0) {
@@ -26,26 +26,26 @@ void divideTriangle(const tinyla::vec2f& a, const tinyla::vec2f& b, const tinyla
         auto const bc = 0.5f * (b + c);
         --count;
         // three new triangles
-        divideTriangle(a, ab, ac, count);
-        divideTriangle(c, ac, bc, count);
-        divideTriangle(b, bc, ab, count);
+        divide_triangle(a, ab, ac, count);
+        divide_triangle(c, ac, bc, count);
+        divide_triangle(b, bc, ab, count);
     }
 }
 
-class Window final : public tinygl::Window
+class window final : public tinygl::window
 {
 public:
-    using tinygl::Window::Window;
+    using tinygl::window::window;
     void init() override;
-    void processInput() override;
+    void process_input() override;
     void draw() override;
 private:
-    tinygl::ShaderProgram program;
-    tinygl::Buffer vBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::VertexArrayObject vao;
+    tinygl::shader_program program;
+    tinygl::buffer v_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::vertex_array_object vao;
 };
 
-void Window::init()
+void window::init()
 {
     // First, initialize the corners of our gasket with three positions.
     auto const vertices = std::array {
@@ -54,37 +54,37 @@ void Window::init()
         tinyla::vec2f{ 1.0f, -1.0f}
     };
 
-    divideTriangle(vertices[0], vertices[1], vertices[2], numTimesToSubdivide);
+    divide_triangle(vertices[0], vertices[1], vertices[2], num_times_to_subdivide);
 
     // Configure OpenGL
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_PROGRAM_POINT_SIZE);
 
     // Load shaders and initialize attribute buffers
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "gasket2.vert");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "gasket2.frag");
+    program.add_shader_from_source_file(tinygl::shader::type::vertex, "gasket2.vert");
+    program.add_shader_from_source_file(tinygl::shader::type::fragment, "gasket2.frag");
     program.link();
     program.use();
 
     // Load the data into the GPU
     vao.bind();
-    vBuffer.bind();
-    vBuffer.create(positions.begin(), positions.end());
+    v_buffer.bind();
+    v_buffer.create(positions.begin(), positions.end());
 
     // Associate shader variables with our data buffer
-    auto const positionLoc = program.attributeLocation("aPosition");
-    vao.setAttributeArray(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(positionLoc);
+    auto const position_loc = program.attribute_location("aPosition");
+    vao.set_attribute_array(position_loc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(position_loc);
 }
 
-void Window::processInput()
+void window::process_input()
 {
-    if (getKey(tinygl::keyboard::Key::Escape) == tinygl::keyboard::KeyState::Press) {
-        setShouldClose(true);
+    if (get_key(tinygl::keyboard::key::escape) == tinygl::keyboard::key_state::press) {
+        set_should_close(true);
     }
 }
 
-void Window::draw()
+void window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(positions.size()));

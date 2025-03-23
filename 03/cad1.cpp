@@ -2,8 +2,8 @@
 #include <tinygl/tinygl.h>
 #include <array>
 
-constexpr auto maxNumTriangles = 200;
-constexpr auto maxNumPositions  = 3 * maxNumTriangles;
+constexpr auto max_num_triangles = 200;
+constexpr auto max_num_positions  = 3 * max_num_triangles;
 constexpr std::array colors = {
     tinyla::vec4f{0.0f, 0.0f, 0.0f, 1.0f},  // black
     tinyla::vec4f{1.0f, 0.0f, 0.0f, 1.0f},  // red
@@ -14,21 +14,21 @@ constexpr std::array colors = {
     tinyla::vec4f{0.0f, 1.0f, 1.0f, 1.0f}   // cyan
 };
 
-class Window final : public tinygl::Window
+class window final : public tinygl::window
 {
 public:
-    using tinygl::Window::Window;
+    using tinygl::window::window;
     void init() override;
-    void processInput() override;
+    void process_input() override;
     void draw() override;
-    void drawUi() override;
+    void draw_ui() override;
 private:
-    tinygl::ShaderProgram program;
-    tinygl::Buffer vBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::Buffer cBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::VertexArrayObject vao;
+    tinygl::shader_program program;
+    tinygl::buffer v_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::buffer c_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::vertex_array_object vao;
     int index{0};
-    int cIndex{0};
+    int c_index{0};
     bool first{true};
     std::array<tinyla::vec2f, 4> t{
         tinyla::vec2f{tinyla::vec_init::uninitialized},
@@ -38,39 +38,39 @@ private:
     };
 };
 
-void Window::init()
+void window::init()
 {
     glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
     glEnable(GL_PROGRAM_POINT_SIZE);
 
     // Load shaders and initialize attribute buffers.
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "cad.vert");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "cad.frag");
+    program.add_shader_from_source_file(tinygl::shader::type::vertex, "cad.vert");
+    program.add_shader_from_source_file(tinygl::shader::type::fragment, "cad.frag");
     program.link();
     program.use();
 
     vao.bind();
-    vBuffer.bind();
-    vBuffer.create(sizeof(tinyla::vec2f) * maxNumPositions);
+    v_buffer.bind();
+    v_buffer.create(sizeof(tinyla::vec2f) * max_num_positions);
 
-    auto positionLoc = program.attributeLocation("aPosition");
-    vao.setAttributeArray(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(positionLoc);
+    auto positionLoc = program.attribute_location("aPosition");
+    vao.set_attribute_array(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(positionLoc);
 
-    cBuffer.bind();
-    cBuffer.create(sizeof(tinyla::vec4f) * maxNumPositions);
+    c_buffer.bind();
+    c_buffer.create(sizeof(tinyla::vec4f) * max_num_positions);
 
-    auto colorLoc = program.attributeLocation("aColor");
-    vao.setAttributeArray(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(colorLoc);
+    auto colorLoc = program.attribute_location("aColor");
+    vao.set_attribute_array(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(colorLoc);
 
-    setMouseButtonCallback([this](
-        tinygl::mouse::Button button,
-        tinygl::input::Action action,
-        tinygl::input::Modifier /* modifier */) {
-        if (button == tinygl::mouse::Button::Left && action == tinygl::input::Action::Press) {
-            const auto [x, y] = getCursorPos<float>();
-            const auto [w, h] = getWindowSize();
+    set_mouse_button_callback([this](
+        tinygl::mouse::button button,
+        tinygl::input::action action,
+        tinygl::input::modifier /* modifier */) {
+        if (button == tinygl::mouse::button::left && action == tinygl::input::action::press) {
+            const auto [x, y] = get_cursor_pos<float>();
+            const auto [w, h] = get_window_size();
             if (first) {
                 first = false;
                 t[0] = tinyla::vec2f{2*x/w - 1, 2*(h-y)/h - 1};
@@ -80,28 +80,28 @@ void Window::init()
                 t[1] = tinyla::vec2f{t[0][0], t[2][1]};
                 t[3] = tinyla::vec2f{t[2][0], t[0][1]};
 
-                vBuffer.bind();
-                vBuffer.update(sizeof(tinyla::vec2f) * index, t.begin(), t.end());
+                v_buffer.bind();
+                v_buffer.update(sizeof(tinyla::vec2f) * index, t.begin(), t.end());
                 index += 4;
 
-                cBuffer.bind();
-                const auto& tt = colors[cIndex];
+                c_buffer.bind();
+                const auto& tt = colors[c_index];
                 for (int i = 0; i < 4; ++i) {
-                    cBuffer.update(sizeof(tinyla::vec4f) * (index - 4 + i), sizeof(tinyla::vec4f), tt.data());
+                    c_buffer.update(sizeof(tinyla::vec4f) * (index - 4 + i), sizeof(tinyla::vec4f), tt.data());
                 }
             }
         }
     });
 }
 
-void Window::processInput()
+void window::process_input()
 {
-    if (getKey(tinygl::keyboard::Key::Escape) == tinygl::keyboard::KeyState::Press) {
-        setShouldClose(true);
+    if (get_key(tinygl::keyboard::key::escape) == tinygl::keyboard::key_state::press) {
+        set_should_close(true);
     }
 }
 
-void Window::draw()
+void window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     for(int i = 0; i < index; i += 4) {
@@ -109,7 +109,7 @@ void Window::draw()
     }
 }
 
-void Window::drawUi()
+void window::draw_ui()
 {
     ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -122,7 +122,7 @@ void Window::drawUi()
         "magenta",
         "cyan"
     };
-    ImGui::ListBox("Color", &cIndex, items, IM_ARRAYSIZE(items), 7);
+    ImGui::ListBox("Color", &c_index, items, IM_ARRAYSIZE(items), 7);
 
     ImGui::End();
 }

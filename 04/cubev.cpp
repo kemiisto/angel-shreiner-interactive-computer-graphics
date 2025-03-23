@@ -2,10 +2,10 @@
 #include <tinygl/tinygl.h>
 #include <array>
 
-constexpr int numElements  = 36;
-constexpr int xAxis = 0;
-constexpr int yAxis = 1;
-constexpr int zAxis = 2;
+constexpr int num_elements  = 36;
+constexpr int x_axis = 0;
+constexpr int y_axis = 1;
+constexpr int z_axis = 2;
 
 constexpr std::array vertices = {
     tinyla::vec4f{-0.5f, -0.5f,  0.5f, 1.0f},
@@ -18,7 +18,7 @@ constexpr std::array vertices = {
     tinyla::vec4f{ 0.5f, -0.5f, -0.5f, 1.0f}
 };
 
-constexpr std::array vertexColors = {
+constexpr std::array vertex_colors = {
     tinyla::vec4f{0.0f, 0.0f, 0.0f, 1.0f},  // black
     tinyla::vec4f{1.0f, 0.0f, 0.0f, 1.0f},  // red
     tinyla::vec4f{1.0f, 1.0f, 0.0f, 1.0f},  // yellow
@@ -45,27 +45,27 @@ constexpr std::array<GLubyte, 36> indices = {
     0, 1, 5
 };
 
-class Window final : public tinygl::Window
+class window final : public tinygl::window
 {
 public:
-    using tinygl::Window::Window;
+    using tinygl::window::window;
     void init() override;
-    void processInput() override;
+    void process_input() override;
     void draw() override;
-    void drawUi() override;
+    void draw_ui() override;
 private:
-    tinygl::ShaderProgram program;
-    tinygl::Buffer vBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::Buffer cBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::Buffer iBuffer{tinygl::Buffer::Type::IndexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::VertexArrayObject vao;
+    tinygl::shader_program program;
+    tinygl::buffer v_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::buffer c_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::buffer i_buffer{tinygl::buffer::type::index_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::vertex_array_object vao;
 
     tinyla::vec3f theta{0.0f, 0.0f, 0.0f};
     int axis = 0;
-    int thetaLoc{-1};
+    int theta_loc{-1};
 };
 
-void Window::init()
+void window::init()
 {
     // Configure OpenGL.
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -73,8 +73,8 @@ void Window::init()
     glEnable(GL_DEPTH_TEST);
 
     // Load shaders and initialize attribute buffers.
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "cube.vert");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "cube.frag");
+    program.add_shader_from_source_file(tinygl::shader::type::vertex, "cube.vert");
+    program.add_shader_from_source_file(tinygl::shader::type::fragment, "cube.frag");
     program.link();
     program.use();
 
@@ -82,71 +82,71 @@ void Window::init()
     vao.bind();
 
     // array element buffer
-    iBuffer.bind();
-    iBuffer.create(indices.begin(), indices.end());
+    i_buffer.bind();
+    i_buffer.create(indices.begin(), indices.end());
 
     // color array atrribute buffer
-    cBuffer.bind();
-    cBuffer.create(vertexColors.begin(), vertexColors.end());
+    c_buffer.bind();
+    c_buffer.create(vertex_colors.begin(), vertex_colors.end());
 
-    auto colorLoc = program.attributeLocation("aColor");
-    vao.setAttributeArray(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(colorLoc);
+    auto colorLoc = program.attribute_location("aColor");
+    vao.set_attribute_array(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(colorLoc);
 
     // vertex array attribute buffer
-    vBuffer.bind();
-    vBuffer.create(vertices.begin(), vertices.end());
+    v_buffer.bind();
+    v_buffer.create(vertices.begin(), vertices.end());
 
-    auto positionLoc = program.attributeLocation("aPosition");
-    vao.setAttributeArray(positionLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(positionLoc);
+    auto positionLoc = program.attribute_location("aPosition");
+    vao.set_attribute_array(positionLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(positionLoc);
 
-    thetaLoc = program.uniformLocation("uTheta");
+    theta_loc = program.uniform_location("uTheta");
 
-    setKeyCallback([this](tinygl::keyboard::Key key, int /*scancode*/, tinygl::input::Action action, tinygl::input::Modifier /*mods*/) {
-        if (key == tinygl::keyboard::Key::X && action == tinygl::input::Action::Press) {
-            axis = xAxis;
+    set_key_callback([this](tinygl::keyboard::key key, int /*scancode*/, tinygl::input::action action, tinygl::input::modifier /*mods*/) {
+        if (key == tinygl::keyboard::key::x && action == tinygl::input::action::press) {
+            axis = x_axis;
         }
-        if (key == tinygl::keyboard::Key::Y && action == tinygl::input::Action::Press) {
-            axis = yAxis;
+        if (key == tinygl::keyboard::key::y && action == tinygl::input::action::press) {
+            axis = y_axis;
         }
-        if (key == tinygl::keyboard::Key::Z && action == tinygl::input::Action::Press) {
-            axis = zAxis;
+        if (key == tinygl::keyboard::key::z && action == tinygl::input::action::press) {
+            axis = z_axis;
         }
     });
 }
 
-void Window::processInput()
+void window::process_input()
 {
-    if (getKey(tinygl::keyboard::Key::Escape) == tinygl::keyboard::KeyState::Press) {
-        setShouldClose(true);
+    if (get_key(tinygl::keyboard::key::escape) == tinygl::keyboard::key_state::press) {
+        set_should_close(true);
     }
 }
 
-void Window::draw()
+void window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     theta[axis] += 2.0f;
-    program.setUniformValue(thetaLoc, theta);
+    program.set_uniform_value(theta_loc, theta);
 
-    glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_BYTE, 0);
+    glDrawElements(GL_TRIANGLES, num_elements, GL_UNSIGNED_BYTE, 0);
 }
 
-void Window::drawUi()
+void window::draw_ui()
 {
     ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
     if (ImGui::Button("Rotate X")) {
-        axis = xAxis;
+        axis = x_axis;
     }
 
     if (ImGui::Button("Rotate Y")) {
-        axis = yAxis;
+        axis = y_axis;
     }
 
     if (ImGui::Button("Rotate Z")) {
-        axis = zAxis;
+        axis = z_axis;
     }
 
     ImGui::End();

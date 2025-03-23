@@ -4,25 +4,25 @@
 #include <random>
 #include <vector>
 
-constexpr int numPositions = 5000;
+constexpr int num_positions = 5000;
 
-class Window final : public tinygl::Window
+class window final : public tinygl::window
 {
 public:
-    using tinygl::Window::Window;
+    using tinygl::window::window;
     void init() override;
-    void processInput() override;
+    void process_input() override;
     void draw() override;
 private:
-    tinygl::ShaderProgram program;
-    tinygl::Buffer vBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::VertexArrayObject vao;
+    tinygl::shader_program program;
+    tinygl::buffer v_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::vertex_array_object vao;
 };
 
-void Window::init()
+void window::init()
 {
     auto positions = std::vector<tinyla::vec3f>{};
-    positions.reserve(numPositions);
+    positions.reserve(num_positions);
 
     // First, initialize the vertices of our 3D gasket.
     auto const vertices = std::array {
@@ -40,7 +40,7 @@ void Window::init()
 
     // Compute new positions
     // Each new point is located midway between last point and a randomly chosen vertex
-    for (int i = 0; i < numPositions; ++i) {
+    for (int i = 0; i < num_positions; ++i) {
         auto const j = distribution(engine);
         positions.emplace_back(0.5f * (positions[i] + vertices[j]));
     }
@@ -51,33 +51,33 @@ void Window::init()
     glEnable(GL_DEPTH_TEST);
 
     // Load shaders and initialize attribute buffers
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "gasket3.vert");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "gasket3.frag");
+    program.add_shader_from_source_file(tinygl::shader::type::vertex, "gasket3.vert");
+    program.add_shader_from_source_file(tinygl::shader::type::fragment, "gasket3.frag");
     program.link();
     program.use();
 
     // Load the data into the GPU
     vao.bind();
-    vBuffer.bind();
-    vBuffer.create(positions.begin(), positions.end());
+    v_buffer.bind();
+    v_buffer.create(positions.begin(), positions.end());
 
     // Associate shader variables with our data buffer
-    auto const positionLoc = program.attributeLocation("aPosition");
-    vao.setAttributeArray(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(positionLoc);
+    auto const position_loc = program.attribute_location("aPosition");
+    vao.set_attribute_array(position_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(position_loc);
 }
 
-void Window::processInput()
+void window::process_input()
 {
-    if (getKey(tinygl::keyboard::Key::Escape) == tinygl::keyboard::KeyState::Press) {
-        setShouldClose(true);
+    if (get_key(tinygl::keyboard::key::escape) == tinygl::keyboard::key_state::press) {
+        set_should_close(true);
     }
 }
 
-void Window::draw()
+void window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDrawArrays(GL_POINTS, 0, numPositions);
+    glDrawArrays(GL_POINTS, 0, num_positions);
 }
 
 MAIN

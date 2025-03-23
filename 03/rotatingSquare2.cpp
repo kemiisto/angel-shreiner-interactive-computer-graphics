@@ -2,35 +2,35 @@
 #include <tinygl/tinygl.h>
 #include <array>
 
-class Window final : public tinygl::Window
+class window final : public tinygl::window
 {
 public:
-    using tinygl::Window::Window;
+    using tinygl::window::window;
     void init() override;
-    void processInput() override;
+    void process_input() override;
     void draw() override;
-    void drawUi() override;
+    void draw_ui() override;
 private:
-    tinygl::ShaderProgram program;
-    tinygl::Buffer vBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::VertexArrayObject vao;
+    tinygl::shader_program program;
+    tinygl::buffer v_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::vertex_array_object vao;
 
     float theta = 0.0f;
-    int thetaLoc = -1;
+    int theta_loc = -1;
 
     bool direction = true;
-    float speedFactor = 1.0f;
+    float speed_factor = 1.0f;
 };
 
-void Window::init()
+void window::init()
 {
     // Configure OpenGL.
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_PROGRAM_POINT_SIZE);
 
     // Load shaders and initialize attribute buffers.
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "rotatingSquare.vert");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "rotatingSquare.frag");
+    program.add_shader_from_source_file(tinygl::shader::type::vertex, "rotatingSquare.vert");
+    program.add_shader_from_source_file(tinygl::shader::type::fragment, "rotatingSquare.frag");
     program.link();
     program.use();
 
@@ -43,47 +43,47 @@ void Window::init()
 
     // Load the data into the GPU
     vao.bind();
-    vBuffer.bind();
-    vBuffer.create(vertices.begin(), vertices.end());
+    v_buffer.bind();
+    v_buffer.create(vertices.begin(), vertices.end());
 
     // Associate shader variables with our data buffer
-    auto positionLoc = program.attributeLocation("aPosition");
-    vao.setAttributeArray(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(positionLoc);
+    auto positionLoc = program.attribute_location("aPosition");
+    vao.set_attribute_array(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(positionLoc);
 
-    thetaLoc = program.uniformLocation("uTheta");
+    theta_loc = program.uniform_location("uTheta");
 
-    setKeyCallback([this](tinygl::keyboard::Key key, int /*scancode*/, tinygl::input::Action action, tinygl::input::Modifier /*mods*/) {
-        if (key == tinygl::keyboard::Key::D1 && action == tinygl::input::Action::Press) {
+    set_key_callback([this](tinygl::keyboard::key key, int /*scancode*/, tinygl::input::action action, tinygl::input::modifier /*mods*/) {
+        if (key == tinygl::keyboard::key::d1 && action == tinygl::input::action::press) {
             direction = !direction;
         }
-        if (key == tinygl::keyboard::Key::D2 && action == tinygl::input::Action::Press) {
-            speedFactor *= 1.5f;
+        if (key == tinygl::keyboard::key::d2 && action == tinygl::input::action::press) {
+            speed_factor *= 1.5f;
         }
-        if (key == tinygl::keyboard::Key::D3 && action == tinygl::input::Action::Press) {
-            speedFactor /= 1.5f;
+        if (key == tinygl::keyboard::key::d3 && action == tinygl::input::action::press) {
+            speed_factor /= 1.5f;
         }
     });
 }
 
-void Window::processInput()
+void window::process_input()
 {
-    if (getKey(tinygl::keyboard::Key::Escape) == tinygl::keyboard::KeyState::Press) {
-        setShouldClose(true);
+    if (get_key(tinygl::keyboard::key::escape) == tinygl::keyboard::key_state::press) {
+        set_should_close(true);
     }
 }
 
-void Window::draw()
+void window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    theta += (direction ? 0.1f * speedFactor : -0.1f * speedFactor);
-    program.setUniformValue(thetaLoc, theta);
+    theta += (direction ? 0.1f * speed_factor : -0.1f * speed_factor);
+    program.set_uniform_value(theta_loc, theta);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void Window::drawUi()
+void window::draw_ui()
 {
     ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -103,10 +103,10 @@ void Window::drawUi()
                 direction = !direction;
                 break;
             case 1:
-                speedFactor *= 1.5f;
+                speed_factor *= 1.5f;
                 break;
             case 2:
-                speedFactor /= 1.5f;
+                speed_factor /= 1.5f;
                 break;
         }
     }

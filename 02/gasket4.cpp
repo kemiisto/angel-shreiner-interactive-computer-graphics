@@ -3,9 +3,9 @@
 #include <array>
 #include <vector>
 
-constexpr int numTimesToSubdivide = 3;
+constexpr int num_times_to_subdivide = 3;
 
-auto const baseColors = std::array {
+auto const base_colors = std::array {
     tinyla::vec3f{1.0f, 0.0f, 0.0f},
     tinyla::vec3f{0.0f, 1.0f, 0.0f},
     tinyla::vec3f{0.0f, 0.0f, 1.0f},
@@ -18,11 +18,11 @@ auto colors = std::vector<tinyla::vec3f>{};
 void triangle(const tinyla::vec3f& a, const tinyla::vec3f& b, const tinyla::vec3f& c, int color)
 {
     // add colors and vertices for one triangle
-    colors.push_back(baseColors.at(color));
+    colors.push_back(base_colors.at(color));
     positions.push_back(a);
-    colors.push_back(baseColors.at(color));
+    colors.push_back(base_colors.at(color));
     positions.push_back(b);
-    colors.push_back(baseColors.at(color));
+    colors.push_back(base_colors.at(color));
     positions.push_back(c);
 }
 
@@ -35,7 +35,7 @@ void tetra(const tinyla::vec3f& a, const tinyla::vec3f& b, const tinyla::vec3f& 
     triangle(b, c, d, 3);
 }
 
-void divideTetra(const tinyla::vec3f& a, const tinyla::vec3f& b, const tinyla::vec3f& c, const tinyla::vec3f& d, int count)
+void divide_tetra(const tinyla::vec3f& a, const tinyla::vec3f& b, const tinyla::vec3f& c, const tinyla::vec3f& d, int count)
 {
     // check for end of recursion
     if (count == 0) {
@@ -51,28 +51,28 @@ void divideTetra(const tinyla::vec3f& a, const tinyla::vec3f& b, const tinyla::v
 
         --count;
 
-        divideTetra( a, ab, ac, ad, count);
-        divideTetra(ab,  b, bc, bd, count);
-        divideTetra(ac, bc,  c, cd, count);
-        divideTetra(ad, bd, cd,  d, count);
+        divide_tetra( a, ab, ac, ad, count);
+        divide_tetra(ab,  b, bc, bd, count);
+        divide_tetra(ac, bc,  c, cd, count);
+        divide_tetra(ad, bd, cd,  d, count);
     }
 }
 
-class Window final : public tinygl::Window
+class window final : public tinygl::window
 {
 public:
-    using tinygl::Window::Window;
+    using tinygl::window::window;
     void init() override;
-    void processInput() override;
+    void process_input() override;
     void draw() override;
 private:
-    tinygl::ShaderProgram program;
-    tinygl::Buffer vBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::Buffer cBuffer{tinygl::Buffer::Type::VertexBuffer, tinygl::Buffer::UsagePattern::StaticDraw};
-    tinygl::VertexArrayObject vao;
+    tinygl::shader_program program;
+    tinygl::buffer v_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::buffer c_buffer{tinygl::buffer::type::vertex_buffer, tinygl::buffer::usage_pattern::static_draw};
+    tinygl::vertex_array_object vao;
 };
 
-void Window::init()
+void window::init()
 {
     // First, initialize the corners of our gasket with three positions.
     auto vertices = std::array {
@@ -82,7 +82,7 @@ void Window::init()
         tinyla::vec3f{ 0.8165f, -0.4714f,  0.3333f}
     };
 
-    divideTetra(vertices[0], vertices[1], vertices[2], vertices[3], numTimesToSubdivide);
+    divide_tetra(vertices[0], vertices[1], vertices[2], vertices[3], num_times_to_subdivide);
 
     // Configure OpenGL
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -90,37 +90,37 @@ void Window::init()
     glEnable(GL_DEPTH_TEST);
 
     // Load shaders and initialize attribute buffers
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Vertex, "gasket4.vert");
-    program.addShaderFromSourceFile(tinygl::Shader::Type::Fragment, "gasket4.frag");
+    program.add_shader_from_source_file(tinygl::shader::type::vertex, "gasket4.vert");
+    program.add_shader_from_source_file(tinygl::shader::type::fragment, "gasket4.frag");
     program.link();
     program.use();
 
     // Load the data into the GPU
     vao.bind();
 
-    vBuffer.bind();
-    vBuffer.create(positions.begin(), positions.end());
+    v_buffer.bind();
+    v_buffer.create(positions.begin(), positions.end());
 
-    auto const positionLoc = program.attributeLocation("aPosition");
-    vao.setAttributeArray(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(positionLoc);
+    auto const position_loc = program.attribute_location("aPosition");
+    vao.set_attribute_array(position_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(position_loc);
 
-    cBuffer.bind();
-    cBuffer.create(colors.begin(), colors.end());
+    c_buffer.bind();
+    c_buffer.create(colors.begin(), colors.end());
 
-    auto const colorLoc = program.attributeLocation("aColor");
-    vao.setAttributeArray(colorLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    vao.enableAttributeArray(colorLoc);
+    auto const color_loc = program.attribute_location("aColor");
+    vao.set_attribute_array(color_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    vao.enable_attribute_array(color_loc);
 }
 
-void Window::processInput()
+void window::process_input()
 {
-    if (getKey(tinygl::keyboard::Key::Escape) == tinygl::keyboard::KeyState::Press) {
-        setShouldClose(true);
+    if (get_key(tinygl::keyboard::key::escape) == tinygl::keyboard::key_state::press) {
+        set_should_close(true);
     }
 }
 
-void Window::draw()
+void window::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(positions.size()));
